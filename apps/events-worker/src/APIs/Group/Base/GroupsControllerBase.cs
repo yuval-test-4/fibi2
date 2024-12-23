@@ -102,17 +102,17 @@ public abstract class GroupsControllerBase : ControllerBase
     }
 
     /// <summary>
-    /// Connect multiple EventDataItems records to Group
+    /// Connect multiple EventData records to Group
     /// </summary>
-    [HttpPost("{Id}/eventDataItems")]
-    public async Task<ActionResult> ConnectEventDataItems(
+    [HttpPost("{Id}/eventData")]
+    public async Task<ActionResult> ConnectEventData(
         [FromRoute()] GroupWhereUniqueInput uniqueId,
         [FromQuery()] EventDataWhereUniqueInput[] eventDataItemsId
     )
     {
         try
         {
-            await _service.ConnectEventDataItems(uniqueId, eventDataItemsId);
+            await _service.ConnectEventData(uniqueId, eventDataItemsId);
         }
         catch (NotFoundException)
         {
@@ -123,17 +123,17 @@ public abstract class GroupsControllerBase : ControllerBase
     }
 
     /// <summary>
-    /// Disconnect multiple EventDataItems records from Group
+    /// Disconnect multiple EventData records from Group
     /// </summary>
-    [HttpDelete("{Id}/eventDataItems")]
-    public async Task<ActionResult> DisconnectEventDataItems(
+    [HttpDelete("{Id}/eventData")]
+    public async Task<ActionResult> DisconnectEventData(
         [FromRoute()] GroupWhereUniqueInput uniqueId,
         [FromBody()] EventDataWhereUniqueInput[] eventDataItemsId
     )
     {
         try
         {
-            await _service.DisconnectEventDataItems(uniqueId, eventDataItemsId);
+            await _service.DisconnectEventData(uniqueId, eventDataItemsId);
         }
         catch (NotFoundException)
         {
@@ -144,17 +144,17 @@ public abstract class GroupsControllerBase : ControllerBase
     }
 
     /// <summary>
-    /// Find multiple EventDataItems records for Group
+    /// Find multiple EventData records for Group
     /// </summary>
-    [HttpGet("{Id}/eventDataItems")]
-    public async Task<ActionResult<List<EventData>>> FindEventDataItems(
+    [HttpGet("{Id}/eventData")]
+    public async Task<ActionResult<List<EventData>>> FindEventData(
         [FromRoute()] GroupWhereUniqueInput uniqueId,
         [FromQuery()] EventDataFindManyArgs filter
     )
     {
         try
         {
-            return Ok(await _service.FindEventDataItems(uniqueId, filter));
+            return Ok(await _service.FindEventData(uniqueId, filter));
         }
         catch (NotFoundException)
         {
@@ -163,17 +163,17 @@ public abstract class GroupsControllerBase : ControllerBase
     }
 
     /// <summary>
-    /// Update multiple EventDataItems records for Group
+    /// Update multiple EventData records for Group
     /// </summary>
-    [HttpPatch("{Id}/eventDataItems")]
-    public async Task<ActionResult> UpdateEventDataItems(
+    [HttpPatch("{Id}/eventData")]
+    public async Task<ActionResult> UpdateEventData(
         [FromRoute()] GroupWhereUniqueInput uniqueId,
         [FromBody()] EventDataWhereUniqueInput[] eventDataItemsId
     )
     {
         try
         {
-            await _service.UpdateEventDataItems(uniqueId, eventDataItemsId);
+            await _service.UpdateEventData(uniqueId, eventDataItemsId);
         }
         catch (NotFoundException)
         {

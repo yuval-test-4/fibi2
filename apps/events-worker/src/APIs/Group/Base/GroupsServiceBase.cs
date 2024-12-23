@@ -34,11 +34,11 @@ public abstract class GroupsServiceBase : IGroupsService
         {
             group.Id = createDto.Id;
         }
-        if (createDto.EventDataItems != null)
+        if (createDto.EventData != null)
         {
-            group.EventDataItems = await _context
+            group.EventData = await _context
                 .EventDataItems.Where(eventData =>
-                    createDto.EventDataItems.Select(t => t.Id).Contains(eventData.Id)
+                    createDto.EventData.Select(t => t.Id).Contains(eventData.Id)
                 )
                 .ToListAsync();
         }
@@ -77,7 +77,7 @@ public abstract class GroupsServiceBase : IGroupsService
     public async Task<List<Group>> Groups(GroupFindManyArgs findManyArgs)
     {
         var groups = await _context
-            .Groups.Include(x => x.EventDataItems)
+            .Groups.Include(x => x.EventData)
             .ApplyWhere(findManyArgs.Where)
             .ApplySkip(findManyArgs.Skip)
             .ApplyTake(findManyArgs.Take)
@@ -120,11 +120,11 @@ public abstract class GroupsServiceBase : IGroupsService
     {
         var group = updateDto.ToModel(uniqueId);
 
-        if (updateDto.EventDataItems != null)
+        if (updateDto.EventData != null)
         {
-            group.EventDataItems = await _context
+            group.EventData = await _context
                 .EventDataItems.Where(eventData =>
-                    updateDto.EventDataItems.Select(t => t).Contains(eventData.Id)
+                    updateDto.EventData.Select(t => t).Contains(eventData.Id)
                 )
                 .ToListAsync();
         }
@@ -149,15 +149,15 @@ public abstract class GroupsServiceBase : IGroupsService
     }
 
     /// <summary>
-    /// Connect multiple EventDataItems records to Group
+    /// Connect multiple EventData records to Group
     /// </summary>
-    public async Task ConnectEventDataItems(
+    public async Task ConnectEventData(
         GroupWhereUniqueInput uniqueId,
         EventDataWhereUniqueInput[] childrenIds
     )
     {
         var parent = await _context
-            .Groups.Include(x => x.EventDataItems)
+            .Groups.Include(x => x.EventData)
             .FirstOrDefaultAsync(x => x.Id == uniqueId.Id);
         if (parent == null)
         {
@@ -172,26 +172,26 @@ public abstract class GroupsServiceBase : IGroupsService
             throw new NotFoundException();
         }
 
-        var childrenToConnect = children.Except(parent.EventDataItems);
+        var childrenToConnect = children.Except(parent.EventData);
 
         foreach (var child in childrenToConnect)
         {
-            parent.EventDataItems.Add(child);
+            parent.EventData.Add(child);
         }
 
         await _context.SaveChangesAsync();
     }
 
     /// <summary>
-    /// Disconnect multiple EventDataItems records from Group
+    /// Disconnect multiple EventData records from Group
     /// </summary>
-    public async Task DisconnectEventDataItems(
+    public async Task DisconnectEventData(
         GroupWhereUniqueInput uniqueId,
         EventDataWhereUniqueInput[] childrenIds
     )
     {
         var parent = await _context
-            .Groups.Include(x => x.EventDataItems)
+            .Groups.Include(x => x.EventData)
             .FirstOrDefaultAsync(x => x.Id == uniqueId.Id);
         if (parent == null)
         {
@@ -204,15 +204,15 @@ public abstract class GroupsServiceBase : IGroupsService
 
         foreach (var child in children)
         {
-            parent.EventDataItems?.Remove(child);
+            parent.EventData?.Remove(child);
         }
         await _context.SaveChangesAsync();
     }
 
     /// <summary>
-    /// Find multiple EventDataItems records for Group
+    /// Find multiple EventData records for Group
     /// </summary>
-    public async Task<List<EventData>> FindEventDataItems(
+    public async Task<List<EventData>> FindEventData(
         GroupWhereUniqueInput uniqueId,
         EventDataFindManyArgs groupFindManyArgs
     )
@@ -229,15 +229,15 @@ public abstract class GroupsServiceBase : IGroupsService
     }
 
     /// <summary>
-    /// Update multiple EventDataItems records for Group
+    /// Update multiple EventData records for Group
     /// </summary>
-    public async Task UpdateEventDataItems(
+    public async Task UpdateEventData(
         GroupWhereUniqueInput uniqueId,
         EventDataWhereUniqueInput[] childrenIds
     )
     {
         var group = await _context
-            .Groups.Include(t => t.EventDataItems)
+            .Groups.Include(t => t.EventData)
             .FirstOrDefaultAsync(x => x.Id == uniqueId.Id);
         if (group == null)
         {
@@ -253,7 +253,7 @@ public abstract class GroupsServiceBase : IGroupsService
             throw new NotFoundException();
         }
 
-        group.EventDataItems = children;
+        group.EventData = children;
         await _context.SaveChangesAsync();
     }
 }
