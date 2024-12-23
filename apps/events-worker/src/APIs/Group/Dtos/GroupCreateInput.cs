@@ -4,7 +4,7 @@ public class GroupCreateInput
 {
     public DateTime CreatedAt { get; set; }
 
-    public List<EventData>? EventDataItems { get; set; }
+    public List<EventDatum>? EventData { get; set; }
 
     public string? Id { get; set; }
 

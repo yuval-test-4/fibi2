@@ -9,7 +9,7 @@ public class GroupDbModel
     [Required()]
     public DateTime CreatedAt { get; set; }
 
-    public List<EventDataDbModel>? EventDataItems { get; set; } = new List<EventDataDbModel>();
+    public List<EventDatumDbModel>? EventData { get; set; } = new List<EventDatumDbModel>();
 
     [Key()]
     [Required()]

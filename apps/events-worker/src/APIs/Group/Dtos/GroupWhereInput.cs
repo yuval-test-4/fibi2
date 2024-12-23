@@ -4,7 +4,7 @@ public class GroupWhereInput
 {
     public DateTime? CreatedAt { get; set; }
 
-    public List<string>? EventDataItems { get; set; }
+    public List<string>? EventData { get; set; }
 
     public string? Id { get; set; }
 

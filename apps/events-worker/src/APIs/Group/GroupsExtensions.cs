@@ -10,7 +10,7 @@ public static class GroupsExtensions
         return new Group
         {
             CreatedAt = model.CreatedAt,
-            EventDataItems = model.EventDataItems?.Select(x => x.Id).ToList(),
+            EventData = model.EventData?.Select(x => x.Id).ToList(),
             Id = model.Id,
             Name = model.Name,
             UpdatedAt = model.UpdatedAt,

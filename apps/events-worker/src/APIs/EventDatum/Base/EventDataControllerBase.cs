@@ -8,11 +8,11 @@ namespace EventsWorker.APIs;
 
 [Route("api/[controller]")]
 [ApiController()]
-public abstract class EventDataItemsControllerBase : ControllerBase
+public abstract class EventDataControllerBase : ControllerBase
 {
-    protected readonly IEventDataItemsService _service;
+    protected readonly IEventDataService _service;
 
-    public EventDataItemsControllerBase(IEventDataItemsService service)
+    public EventDataControllerBase(IEventDataService service)
     {
         _service = service;
     }
@@ -21,24 +21,24 @@ public abstract class EventDataItemsControllerBase : ControllerBase
     /// Create one EventData
     /// </summary>
     [HttpPost()]
-    public async Task<ActionResult<EventData>> CreateEventData(EventDataCreateInput input)
+    public async Task<ActionResult<EventDatum>> CreateEventDatum(EventDatumCreateInput input)
     {
-        var eventData = await _service.CreateEventData(input);
+        var eventDatum = await _service.CreateEventDatum(input);
 
-        return CreatedAtAction(nameof(EventData), new { id = eventData.Id }, eventData);
+        return CreatedAtAction(nameof(EventDatum), new { id = eventDatum.Id }, eventDatum);
     }
 
     /// <summary>
     /// Delete one EventData
     /// </summary>
     [HttpDelete("{Id}")]
-    public async Task<ActionResult> DeleteEventData(
-        [FromRoute()] EventDataWhereUniqueInput uniqueId
+    public async Task<ActionResult> DeleteEventDatum(
+        [FromRoute()] EventDatumWhereUniqueInput uniqueId
     )
     {
         try
         {
-            await _service.DeleteEventData(uniqueId);
+            await _service.DeleteEventDatum(uniqueId);
         }
         catch (NotFoundException)
         {
@@ -52,35 +52,35 @@ public abstract class EventDataItemsControllerBase : ControllerBase
     /// Find many EventDataItems
     /// </summary>
     [HttpGet()]
-    public async Task<ActionResult<List<EventData>>> EventDataItems(
-        [FromQuery()] EventDataFindManyArgs filter
+    public async Task<ActionResult<List<EventDatum>>> EventData(
+        [FromQuery()] EventDatumFindManyArgs filter
     )
     {
-        return Ok(await _service.EventDataItems(filter));
+        return Ok(await _service.EventData(filter));
     }
 
     /// <summary>
     /// Meta data about EventData records
     /// </summary>
     [HttpPost("meta")]
-    public async Task<ActionResult<MetadataDto>> EventDataItemsMeta(
-        [FromQuery()] EventDataFindManyArgs filter
+    public async Task<ActionResult<MetadataDto>> EventDataMeta(
+        [FromQuery()] EventDatumFindManyArgs filter
     )
     {
-        return Ok(await _service.EventDataItemsMeta(filter));
+        return Ok(await _service.EventDataMeta(filter));
     }
 
     /// <summary>
     /// Get one EventData
     /// </summary>
     [HttpGet("{Id}")]
-    public async Task<ActionResult<EventData>> EventData(
-        [FromRoute()] EventDataWhereUniqueInput uniqueId
+    public async Task<ActionResult<EventDatum>> EventDatum(
+        [FromRoute()] EventDatumWhereUniqueInput uniqueId
     )
     {
         try
         {
-            return await _service.EventData(uniqueId);
+            return await _service.EventDatum(uniqueId);
         }
         catch (NotFoundException)
         {
@@ -92,14 +92,14 @@ public abstract class EventDataItemsControllerBase : ControllerBase
     /// Update one EventData
     /// </summary>
     [HttpPatch("{Id}")]
-    public async Task<ActionResult> UpdateEventData(
-        [FromRoute()] EventDataWhereUniqueInput uniqueId,
-        [FromQuery()] EventDataUpdateInput eventDataUpdateDto
+    public async Task<ActionResult> UpdateEventDatum(
+        [FromRoute()] EventDatumWhereUniqueInput uniqueId,
+        [FromQuery()] EventDatumUpdateInput eventDatumUpdateDto
     )
     {
         try
         {
-            await _service.UpdateEventData(uniqueId, eventDataUpdateDto);
+            await _service.UpdateEventDatum(uniqueId, eventDatumUpdateDto);
         }
         catch (NotFoundException)
         {
@@ -114,7 +114,7 @@ public abstract class EventDataItemsControllerBase : ControllerBase
     /// </summary>
     [HttpGet("{Id}/group")]
     public async Task<ActionResult<List<Group>>> GetGroup(
-        [FromRoute()] EventDataWhereUniqueInput uniqueId
+        [FromRoute()] EventDatumWhereUniqueInput uniqueId
     )
     {
         var group = await _service.GetGroup(uniqueId);

@@ -1,6 +1,6 @@
 namespace EventsWorker.APIs.Dtos;
 
-public class EventDataUpdateInput
+public class EventDatumUpdateInput
 {
     public DateTime? CreatedAt { get; set; }
 

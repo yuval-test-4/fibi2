@@ -1,6 +1,6 @@
 namespace EventsWorker.APIs.Dtos;
 
-public class EventDataWhereUniqueInput
+public class EventDatumWhereUniqueInput
 {
     public string Id { get; set; }
 }

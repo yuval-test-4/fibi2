@@ -36,34 +36,34 @@ public interface IGroupsService
     public Task UpdateGroup(GroupWhereUniqueInput uniqueId, GroupUpdateInput updateDto);
 
     /// <summary>
-    /// Connect multiple EventDataItems records to Group
+    /// Connect multiple EventData records to Group
     /// </summary>
-    public Task ConnectEventDataItems(
+    public Task ConnectEventData(
         GroupWhereUniqueInput uniqueId,
-        EventDataWhereUniqueInput[] eventDataId
+        EventDatumWhereUniqueInput[] eventDataId
     );
 
     /// <summary>
-    /// Disconnect multiple EventDataItems records from Group
+    /// Disconnect multiple EventData records from Group
     /// </summary>
-    public Task DisconnectEventDataItems(
+    public Task DisconnectEventData(
         GroupWhereUniqueInput uniqueId,
-        EventDataWhereUniqueInput[] eventDataId
+        EventDatumWhereUniqueInput[] eventDataId
     );
 
     /// <summary>
-    /// Find multiple EventDataItems records for Group
+    /// Find multiple EventData records for Group
     /// </summary>
-    public Task<List<EventData>> FindEventDataItems(
+    public Task<List<EventDatum>> FindEventData(
         GroupWhereUniqueInput uniqueId,
-        EventDataFindManyArgs EventDataFindManyArgs
+        EventDatumFindManyArgs EventDatumFindManyArgs
     );
 
     /// <summary>
-    /// Update multiple EventDataItems records for Group
+    /// Update multiple EventData records for Group
     /// </summary>
-    public Task UpdateEventDataItems(
+    public Task UpdateEventData(
         GroupWhereUniqueInput uniqueId,
-        EventDataWhereUniqueInput[] eventDataId
+        EventDatumWhereUniqueInput[] eventDataId
     );
 }
