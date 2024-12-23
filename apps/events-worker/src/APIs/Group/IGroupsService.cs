@@ -40,7 +40,7 @@ public interface IGroupsService
     /// </summary>
     public Task ConnectEventData(
         GroupWhereUniqueInput uniqueId,
-        EventDataWhereUniqueInput[] eventDataId
+        EventDatumWhereUniqueInput[] eventDataId
     );
 
     /// <summary>
@@ -48,15 +48,15 @@ public interface IGroupsService
     /// </summary>
     public Task DisconnectEventData(
         GroupWhereUniqueInput uniqueId,
-        EventDataWhereUniqueInput[] eventDataId
+        EventDatumWhereUniqueInput[] eventDataId
     );
 
     /// <summary>
     /// Find multiple EventData records for Group
     /// </summary>
-    public Task<List<EventData>> FindEventData(
+    public Task<List<EventDatum>> FindEventData(
         GroupWhereUniqueInput uniqueId,
-        EventDataFindManyArgs EventDataFindManyArgs
+        EventDatumFindManyArgs EventDatumFindManyArgs
     );
 
     /// <summary>
@@ -64,6 +64,6 @@ public interface IGroupsService
     /// </summary>
     public Task UpdateEventData(
         GroupWhereUniqueInput uniqueId,
-        EventDataWhereUniqueInput[] eventDataId
+        EventDatumWhereUniqueInput[] eventDataId
     );
 }

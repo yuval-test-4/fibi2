@@ -1,12 +1,12 @@
 namespace EventsWorker.APIs.Dtos;
 
-public class EventDataCreateInput
+public class EventDatum
 {
     public DateTime CreatedAt { get; set; }
 
-    public Group? Group { get; set; }
+    public string? Group { get; set; }
 
-    public string? Id { get; set; }
+    public string Id { get; set; }
 
     public string? Message { get; set; }
 

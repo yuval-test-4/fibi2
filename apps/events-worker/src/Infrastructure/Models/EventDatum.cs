@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EventsWorker.Infrastructure.Models;
 
 [Table("EventData")]
-public class EventDataDbModel
+public class EventDatumDbModel
 {
     [Required()]
     public DateTime CreatedAt { get; set; }

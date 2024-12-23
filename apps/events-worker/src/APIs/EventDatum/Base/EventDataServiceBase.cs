@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventsWorker.APIs;
 
-public abstract class EventDataItemsServiceBase : IEventDataItemsService
+public abstract class EventDataServiceBase : IEventDataService
 {
     protected readonly EventsWorkerDbContext _context;
 
-    public EventDataItemsServiceBase(EventsWorkerDbContext context)
+    public EventDataServiceBase(EventsWorkerDbContext context)
     {
         _context = context;
     }
@@ -21,9 +21,9 @@ public abstract class EventDataItemsServiceBase : IEventDataItemsService
     /// <summary>
     /// Create one EventData
     /// </summary>
-    public async Task<EventData> CreateEventData(EventDataCreateInput createDto)
+    public async Task<EventDatum> CreateEventDatum(EventDatumCreateInput createDto)
     {
-        var eventData = new EventDataDbModel
+        var eventDatum = new EventDatumDbModel
         {
             CreatedAt = createDto.CreatedAt,
             Message = createDto.Message,
@@ -32,19 +32,19 @@ public abstract class EventDataItemsServiceBase : IEventDataItemsService
 
         if (createDto.Id != null)
         {
-            eventData.Id = createDto.Id;
+            eventDatum.Id = createDto.Id;
         }
         if (createDto.Group != null)
         {
-            eventData.Group = await _context
+            eventDatum.Group = await _context
                 .Groups.Where(group => createDto.Group.Id == group.Id)
                 .FirstOrDefaultAsync();
         }
 
-        _context.EventDataItems.Add(eventData);
+        _context.EventData.Add(eventDatum);
         await _context.SaveChangesAsync();
 
-        var result = await _context.FindAsync<EventDataDbModel>(eventData.Id);
+        var result = await _context.FindAsync<EventDatumDbModel>(eventDatum.Id);
 
         if (result == null)
         {
@@ -57,39 +57,39 @@ public abstract class EventDataItemsServiceBase : IEventDataItemsService
     /// <summary>
     /// Delete one EventData
     /// </summary>
-    public async Task DeleteEventData(EventDataWhereUniqueInput uniqueId)
+    public async Task DeleteEventDatum(EventDatumWhereUniqueInput uniqueId)
     {
-        var eventData = await _context.EventDataItems.FindAsync(uniqueId.Id);
-        if (eventData == null)
+        var eventDatum = await _context.EventData.FindAsync(uniqueId.Id);
+        if (eventDatum == null)
         {
             throw new NotFoundException();
         }
 
-        _context.EventDataItems.Remove(eventData);
+        _context.EventData.Remove(eventDatum);
         await _context.SaveChangesAsync();
     }
 
     /// <summary>
     /// Find many EventDataItems
     /// </summary>
-    public async Task<List<EventData>> EventDataItems(EventDataFindManyArgs findManyArgs)
+    public async Task<List<EventDatum>> EventData(EventDatumFindManyArgs findManyArgs)
     {
-        var eventDataItems = await _context
-            .EventDataItems.Include(x => x.Group)
+        var eventData = await _context
+            .EventData.Include(x => x.Group)
             .ApplyWhere(findManyArgs.Where)
             .ApplySkip(findManyArgs.Skip)
             .ApplyTake(findManyArgs.Take)
             .ApplyOrderBy(findManyArgs.SortBy)
             .ToListAsync();
-        return eventDataItems.ConvertAll(eventData => eventData.ToDto());
+        return eventData.ConvertAll(eventDatum => eventDatum.ToDto());
     }
 
     /// <summary>
     /// Meta data about EventData records
     /// </summary>
-    public async Task<MetadataDto> EventDataItemsMeta(EventDataFindManyArgs findManyArgs)
+    public async Task<MetadataDto> EventDataMeta(EventDatumFindManyArgs findManyArgs)
     {
-        var count = await _context.EventDataItems.ApplyWhere(findManyArgs.Where).CountAsync();
+        var count = await _context.EventData.ApplyWhere(findManyArgs.Where).CountAsync();
 
         return new MetadataDto { Count = count };
     }
@@ -97,38 +97,38 @@ public abstract class EventDataItemsServiceBase : IEventDataItemsService
     /// <summary>
     /// Get one EventData
     /// </summary>
-    public async Task<EventData> EventData(EventDataWhereUniqueInput uniqueId)
+    public async Task<EventDatum> EventDatum(EventDatumWhereUniqueInput uniqueId)
     {
-        var eventDataItems = await this.EventDataItems(
-            new EventDataFindManyArgs { Where = new EventDataWhereInput { Id = uniqueId.Id } }
+        var eventData = await this.EventData(
+            new EventDatumFindManyArgs { Where = new EventDatumWhereInput { Id = uniqueId.Id } }
         );
-        var eventData = eventDataItems.FirstOrDefault();
-        if (eventData == null)
+        var eventDatum = eventData.FirstOrDefault();
+        if (eventDatum == null)
         {
             throw new NotFoundException();
         }
 
-        return eventData;
+        return eventDatum;
     }
 
     /// <summary>
     /// Update one EventData
     /// </summary>
-    public async Task UpdateEventData(
-        EventDataWhereUniqueInput uniqueId,
-        EventDataUpdateInput updateDto
+    public async Task UpdateEventDatum(
+        EventDatumWhereUniqueInput uniqueId,
+        EventDatumUpdateInput updateDto
     )
     {
-        var eventData = updateDto.ToModel(uniqueId);
+        var eventDatum = updateDto.ToModel(uniqueId);
 
         if (updateDto.Group != null)
         {
-            eventData.Group = await _context
+            eventDatum.Group = await _context
                 .Groups.Where(group => updateDto.Group == group.Id)
                 .FirstOrDefaultAsync();
         }
 
-        _context.Entry(eventData).State = EntityState.Modified;
+        _context.Entry(eventDatum).State = EntityState.Modified;
 
         try
         {
@@ -136,7 +136,7 @@ public abstract class EventDataItemsServiceBase : IEventDataItemsService
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!_context.EventDataItems.Any(e => e.Id == eventData.Id))
+            if (!_context.EventData.Any(e => e.Id == eventDatum.Id))
             {
                 throw new NotFoundException();
             }
@@ -150,16 +150,16 @@ public abstract class EventDataItemsServiceBase : IEventDataItemsService
     /// <summary>
     /// Get a Group record for EventData
     /// </summary>
-    public async Task<Group> GetGroup(EventDataWhereUniqueInput uniqueId)
+    public async Task<Group> GetGroup(EventDatumWhereUniqueInput uniqueId)
     {
-        var eventData = await _context
-            .EventDataItems.Where(eventData => eventData.Id == uniqueId.Id)
-            .Include(eventData => eventData.Group)
+        var eventDatum = await _context
+            .EventData.Where(eventDatum => eventDatum.Id == uniqueId.Id)
+            .Include(eventDatum => eventDatum.Group)
             .FirstOrDefaultAsync();
-        if (eventData == null)
+        if (eventDatum == null)
         {
             throw new NotFoundException();
         }
-        return eventData.Group.ToDto();
+        return eventDatum.Group.ToDto();
     }
 }

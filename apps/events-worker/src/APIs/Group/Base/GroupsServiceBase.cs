@@ -37,8 +37,8 @@ public abstract class GroupsServiceBase : IGroupsService
         if (createDto.EventData != null)
         {
             group.EventData = await _context
-                .EventDataItems.Where(eventData =>
-                    createDto.EventData.Select(t => t.Id).Contains(eventData.Id)
+                .EventData.Where(eventDatum =>
+                    createDto.EventData.Select(t => t.Id).Contains(eventDatum.Id)
                 )
                 .ToListAsync();
         }
@@ -123,8 +123,8 @@ public abstract class GroupsServiceBase : IGroupsService
         if (updateDto.EventData != null)
         {
             group.EventData = await _context
-                .EventDataItems.Where(eventData =>
-                    updateDto.EventData.Select(t => t).Contains(eventData.Id)
+                .EventData.Where(eventDatum =>
+                    updateDto.EventData.Select(t => t).Contains(eventDatum.Id)
                 )
                 .ToListAsync();
         }
@@ -153,7 +153,7 @@ public abstract class GroupsServiceBase : IGroupsService
     /// </summary>
     public async Task ConnectEventData(
         GroupWhereUniqueInput uniqueId,
-        EventDataWhereUniqueInput[] childrenIds
+        EventDatumWhereUniqueInput[] childrenIds
     )
     {
         var parent = await _context
@@ -165,7 +165,7 @@ public abstract class GroupsServiceBase : IGroupsService
         }
 
         var children = await _context
-            .EventDataItems.Where(t => childrenIds.Select(x => x.Id).Contains(t.Id))
+            .EventData.Where(t => childrenIds.Select(x => x.Id).Contains(t.Id))
             .ToListAsync();
         if (children.Count == 0)
         {
@@ -187,7 +187,7 @@ public abstract class GroupsServiceBase : IGroupsService
     /// </summary>
     public async Task DisconnectEventData(
         GroupWhereUniqueInput uniqueId,
-        EventDataWhereUniqueInput[] childrenIds
+        EventDatumWhereUniqueInput[] childrenIds
     )
     {
         var parent = await _context
@@ -199,7 +199,7 @@ public abstract class GroupsServiceBase : IGroupsService
         }
 
         var children = await _context
-            .EventDataItems.Where(t => childrenIds.Select(x => x.Id).Contains(t.Id))
+            .EventData.Where(t => childrenIds.Select(x => x.Id).Contains(t.Id))
             .ToListAsync();
 
         foreach (var child in children)
@@ -212,20 +212,20 @@ public abstract class GroupsServiceBase : IGroupsService
     /// <summary>
     /// Find multiple EventData records for Group
     /// </summary>
-    public async Task<List<EventData>> FindEventData(
+    public async Task<List<EventDatum>> FindEventData(
         GroupWhereUniqueInput uniqueId,
-        EventDataFindManyArgs groupFindManyArgs
+        EventDatumFindManyArgs groupFindManyArgs
     )
     {
-        var eventDataItems = await _context
-            .EventDataItems.Where(m => m.GroupId == uniqueId.Id)
+        var eventData = await _context
+            .EventData.Where(m => m.GroupId == uniqueId.Id)
             .ApplyWhere(groupFindManyArgs.Where)
             .ApplySkip(groupFindManyArgs.Skip)
             .ApplyTake(groupFindManyArgs.Take)
             .ApplyOrderBy(groupFindManyArgs.SortBy)
             .ToListAsync();
 
-        return eventDataItems.Select(x => x.ToDto()).ToList();
+        return eventData.Select(x => x.ToDto()).ToList();
     }
 
     /// <summary>
@@ -233,7 +233,7 @@ public abstract class GroupsServiceBase : IGroupsService
     /// </summary>
     public async Task UpdateEventData(
         GroupWhereUniqueInput uniqueId,
-        EventDataWhereUniqueInput[] childrenIds
+        EventDatumWhereUniqueInput[] childrenIds
     )
     {
         var group = await _context
@@ -245,7 +245,7 @@ public abstract class GroupsServiceBase : IGroupsService
         }
 
         var children = await _context
-            .EventDataItems.Where(a => childrenIds.Select(x => x.Id).Contains(a.Id))
+            .EventData.Where(a => childrenIds.Select(x => x.Id).Contains(a.Id))
             .ToListAsync();
 
         if (children.Count == 0)

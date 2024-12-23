@@ -107,12 +107,12 @@ public abstract class GroupsControllerBase : ControllerBase
     [HttpPost("{Id}/eventData")]
     public async Task<ActionResult> ConnectEventData(
         [FromRoute()] GroupWhereUniqueInput uniqueId,
-        [FromQuery()] EventDataWhereUniqueInput[] eventDataItemsId
+        [FromQuery()] EventDatumWhereUniqueInput[] eventDataId
     )
     {
         try
         {
-            await _service.ConnectEventData(uniqueId, eventDataItemsId);
+            await _service.ConnectEventData(uniqueId, eventDataId);
         }
         catch (NotFoundException)
         {
@@ -128,12 +128,12 @@ public abstract class GroupsControllerBase : ControllerBase
     [HttpDelete("{Id}/eventData")]
     public async Task<ActionResult> DisconnectEventData(
         [FromRoute()] GroupWhereUniqueInput uniqueId,
-        [FromBody()] EventDataWhereUniqueInput[] eventDataItemsId
+        [FromBody()] EventDatumWhereUniqueInput[] eventDataId
     )
     {
         try
         {
-            await _service.DisconnectEventData(uniqueId, eventDataItemsId);
+            await _service.DisconnectEventData(uniqueId, eventDataId);
         }
         catch (NotFoundException)
         {
@@ -147,9 +147,9 @@ public abstract class GroupsControllerBase : ControllerBase
     /// Find multiple EventData records for Group
     /// </summary>
     [HttpGet("{Id}/eventData")]
-    public async Task<ActionResult<List<EventData>>> FindEventData(
+    public async Task<ActionResult<List<EventDatum>>> FindEventData(
         [FromRoute()] GroupWhereUniqueInput uniqueId,
-        [FromQuery()] EventDataFindManyArgs filter
+        [FromQuery()] EventDatumFindManyArgs filter
     )
     {
         try
@@ -168,12 +168,12 @@ public abstract class GroupsControllerBase : ControllerBase
     [HttpPatch("{Id}/eventData")]
     public async Task<ActionResult> UpdateEventData(
         [FromRoute()] GroupWhereUniqueInput uniqueId,
-        [FromBody()] EventDataWhereUniqueInput[] eventDataItemsId
+        [FromBody()] EventDatumWhereUniqueInput[] eventDataId
     )
     {
         try
         {
-            await _service.UpdateEventData(uniqueId, eventDataItemsId);
+            await _service.UpdateEventData(uniqueId, eventDataId);
         }
         catch (NotFoundException)
         {

@@ -1,6 +1,6 @@
 namespace EventsWorker.APIs.Dtos;
 
-public class EventDataWhereInput
+public class EventDatumWhereInput
 {
     public DateTime? CreatedAt { get; set; }
 
